@@ -5,7 +5,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.LinearGradient;
 import android.graphics.Paint;
-import android.graphics.Path;
 import android.graphics.RectF;
 import android.graphics.Shader;
 import android.support.annotation.Nullable;
@@ -27,6 +26,7 @@ public class LinearGradientView extends View {
     private int heightNum = 3;
     private int[] colorPurpleArray;
     private int[] colorPinkArray;
+    private int[] colorTextColor;
 
     public LinearGradientView(Context context) {
         super(context);
@@ -59,6 +59,10 @@ public class LinearGradientView extends View {
                 Color.parseColor("#ff4081"),
                 Color.parseColor("#c51162"),
         };
+        colorTextColor = new int[]{
+                Color.parseColor("#ff0000"),
+                Color.parseColor("#000000")
+        };
     }
 
     @Override
@@ -78,12 +82,14 @@ public class LinearGradientView extends View {
     }
 
     public void drawBack(Canvas canvas) {
+        //绘制
         canvas.save();
         float shadowLayout = CommonUtil.dp2px(2, getContext());
         int space = (int) CommonUtil.dp2px(4, getContext());
         float width = (getMeasuredWidth() - (widthNum + 1) * space) / widthNum;
         heightNum = (int) (getMeasuredHeight() / width);
         RectF rectF = new RectF();
+        Shader shader = null;
         int count = 0;
         for (int i = 0; i < heightNum; i++) {
             rectF.top = i * width + (i + 1) * space;
@@ -93,11 +99,35 @@ public class LinearGradientView extends View {
                 rectF.right = rectF.left + width;
                 count++;
                 mPaint.setColor(Color.parseColor("#dddddd"));
+                //绘制背景
+                shader = null;
+                switch (count) {
+                    case 7:
+                        shader = new LinearGradient(rectF.left, rectF.top, rectF.right,
+                                rectF.bottom, colorPurpleArray, new float[]{0, 0.33f, 0.66f, 0.88f}, Shader.TileMode.CLAMP);
+                        break;
+                    case 8:
+                        shader = new LinearGradient(rectF.left, rectF.top, rectF.right,
+                                rectF.bottom, colorPurpleArray, new float[]{0, 0.33f, 0.66f, 0.66f}, Shader.TileMode.REPEAT);
+                        break;
+                    case 9:
+                        shader = new LinearGradient(rectF.left, rectF.top, rectF.right,
+                                rectF.bottom, colorPurpleArray, new float[]{0, 0.33f, 0.50f, 0.50f}, Shader.TileMode.CLAMP);
+                        break;
+                }
+                mPaint.setShader(shader);
                 canvas.drawRoundRect(rectF, shadowLayout * 2, shadowLayout * 2, mPaint);
+                //绘制各种图形
                 drawGraph(canvas, rectF, count);
             }
         }
         canvas.restore();
+        //绘制闪动文字
+
+        shader = new LinearGradient(0, rectF.bottom,  (rectF.right - rectF.left) / 2,
+                rectF.bottom, colorTextColor, new float[]{0.1f, 0.1f}, Shader.TileMode.MIRROR);
+        mPaint.setShader(shader);
+        canvas.drawText("非淡泊无以明智，非宁静无以致远", 0, getMeasuredHeight() - CommonUtil.dp2px(20, getContext()), mPaint);
     }
 
     public void drawGraph(Canvas canvas, RectF rectF, int count) {
@@ -137,20 +167,63 @@ public class LinearGradientView extends View {
                 break;
             case 7:
                 break;
+            case 8:
+                break;
             case 9:
                 break;
             default:
                 shader = new LinearGradient(rectF.left, rectF.top, rectF.right,
                         rectF.bottom, colorPurpleArray[0], colorPurpleArray[2], Shader.TileMode.CLAMP);
         }
+
+        //超过绘制类型范围return;
+        if (count > 6) {
+            mPaint.setShader(null);
+            return;
+        }
         mPaint.setShader(shader);
+        //绘制当前色块下的画线效果
         mPaint.setStrokeJoin(Paint.Join.ROUND);
         canvas.drawLine(rectF.left, rectF.top, rectF.right, rectF.bottom, mPaint);
+        //绘制当前变换下的圆角矩形效果
         float radius = CommonUtil.dp2px(2, getContext());
+        mPaint.setStyle(Paint.Style.FILL_AND_STROKE);
         canvas.drawRoundRect(rectF.left, rectF.top +
                 ColorWidth, rectF.left + ColorWidth, rectF.top + 2 * ColorWidth, radius, radius, mPaint);
+        //绘制当前线性变换类型文本
+        mPaint.setStyle(Paint.Style.FILL);
         canvas.drawText(content, rectF.left, rectF.bottom - ColorWidth, mPaint);
+        //计算绘圆形的坐标和半径
+        float cenX = rectF.left + (rectF.right - rectF.left) / 2;
+        float cenY = rectF.top + (rectF.bottom - rectF.top) / 2;
+        float circleRadius = CommonUtil.dp2px(10, getContext());
+        float offset = (float) (circleRadius / Math.sqrt(2));
+        //绘制当前变换下圆形和扇形
+        mPaint.setStyle(Paint.Style.FILL);
+        canvas.drawCircle(cenX + offset, cenY - offset, circleRadius, mPaint);
+        float arcOffset = 3 * circleRadius;
+        if (count == 3) {
+            canvas.drawArc(rectF.right - arcOffset, rectF.top - arcOffset, rectF.right + arcOffset, rectF.top +
+                    arcOffset, 90, 90, false, mPaint);
+        }
+        if (count < 3) {
+            canvas.drawArc(rectF.right - arcOffset, rectF.top - arcOffset, rectF.right + arcOffset, rectF.top +
+                    arcOffset, 90, 90, true, mPaint);
+        }
+        //绘制当前变换下圆形和扇形
+        mPaint.setStyle(Paint.Style.STROKE);
+        canvas.drawCircle(cenX - offset, cenY + offset, circleRadius, mPaint);
+        if (count == 4) {
+            canvas.drawArc(rectF.right - arcOffset, rectF.top - arcOffset, rectF.right + arcOffset, rectF.top +
+                    arcOffset, 90, 90, false, mPaint);
+        }
+        if (count > 4 && count < 7) {
+            canvas.drawArc(rectF.right - arcOffset, rectF.top - arcOffset, rectF.right + arcOffset, rectF.top +
+                    arcOffset, 90, 90, true, mPaint);
+        }
+        //绘制目前所用色块
         mPaint.setShader(null);
+        mPaint.setStyle(Paint.Style.FILL);
         if (count < 4 && count >= 0) {
             for (int i = 0; i < 2; i++) {
                 mPaint.setColor(colorPinkArray[i * 2]);
@@ -165,7 +238,7 @@ public class LinearGradientView extends View {
             }
         }
         canvas.restore();
-
     }
+
 
 }

@@ -44,10 +44,14 @@ public class LinearGradientView extends View {
         mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mPaint.setStrokeWidth(CommonUtil.dp2px(2, getContext()));
         mPaint.setTextSize(CommonUtil.sp2px(16, getContext()));
-        colorPurpleArray = new int[]{Color.parseColor("#e1bee7"),
-                Color.parseColor("#e91e63"),
-                Color.parseColor("#ba68c8"),
-                Color.parseColor("#f8bbd0")};
+//        colorPurpleArray = new int[]{Color.parseColor("#e1bee7"),
+//                Color.parseColor("#e91e63"),
+//                Color.parseColor("#ba68c8"),
+//                Color.parseColor("#f8bbd0")};
+        colorPurpleArray = new int[]{Color.parseColor("#ff0000"),
+                Color.parseColor("#00ff00"),
+                Color.parseColor("#0000ff"),
+                Color.parseColor("#000000")};
         colorPinkArray = new int[]{
                 Color.parseColor("#f8bbd0"),
                 Color.parseColor("#f48fd1"),
@@ -61,7 +65,7 @@ public class LinearGradientView extends View {
         };
         colorTextColor = new int[]{
                 Color.parseColor("#ff0000"),
-                Color.parseColor("#000000")
+                Color.parseColor("#0000ff")
         };
     }
 
@@ -104,15 +108,15 @@ public class LinearGradientView extends View {
                 switch (count) {
                     case 7:
                         shader = new LinearGradient(rectF.left, rectF.top, rectF.right,
-                                rectF.bottom, colorPurpleArray, new float[]{0, 0.33f, 0.66f, 0.88f}, Shader.TileMode.CLAMP);
+                                rectF.bottom, colorPurpleArray, new float[]{1.0f, 0.5f, 0.5f, 0.88f}, Shader.TileMode.CLAMP);
                         break;
                     case 8:
                         shader = new LinearGradient(rectF.left, rectF.top, rectF.right,
-                                rectF.bottom, colorPurpleArray, new float[]{0, 0.33f, 0.66f, 0.66f}, Shader.TileMode.REPEAT);
+                                rectF.bottom, colorPurpleArray, new float[]{0.2f, 0.55f, 0.66f, 0.66f}, Shader.TileMode.REPEAT);
                         break;
                     case 9:
                         shader = new LinearGradient(rectF.left, rectF.top, rectF.right,
-                                rectF.bottom, colorPurpleArray, new float[]{0, 0.33f, 0.50f, 0.50f}, Shader.TileMode.CLAMP);
+                                rectF.bottom, colorPurpleArray, new float[]{0, 0.55f, 0.66f, 0.66f}, Shader.TileMode.REPEAT);
                         break;
                 }
                 mPaint.setShader(shader);
@@ -123,13 +127,25 @@ public class LinearGradientView extends View {
         }
         canvas.restore();
         //绘制闪动文字
-
-        shader = new LinearGradient(0, rectF.bottom,  (rectF.right - rectF.left) / 2,
-                rectF.bottom, colorTextColor, new float[]{0.1f, 0.1f}, Shader.TileMode.MIRROR);
+        String content = "非淡泊无以明智，非宁静无以致远";
+        float contentWidth = mPaint.measureText(content);
+        mPaint.setColor(Color.parseColor("#00ff00"));
+        shader = new LinearGradient(0, rectF.bottom, contentWidth,
+                rectF.bottom, colorTextColor, new float[]{0.0f, 0.5f}, Shader.TileMode.REPEAT);
+        shader = new LinearGradient(0, rectF.bottom, contentWidth,
+                rectF.bottom, colorPurpleArray, new float[]{0.5f, 1.0f, 0.0f, 0.0f}, Shader.TileMode.CLAMP);
+        mPaint.setShader(shader);
+        canvas.drawText("非淡泊无以明智，非宁静无以致远", 0, getMeasuredHeight()-2*CommonUtil.dp2px(20,getContext()), mPaint);
+        shader = new LinearGradient(0, rectF.bottom, contentWidth,
+                rectF.bottom, colorTextColor, new float[]{0.9f, 0.9f}, Shader.TileMode.CLAMP);
         mPaint.setShader(shader);
         canvas.drawText("非淡泊无以明智，非宁静无以致远", 0, getMeasuredHeight() - CommonUtil.dp2px(20, getContext()), mPaint);
-    }
+        shader = new LinearGradient(0, rectF.bottom, contentWidth,
+                rectF.bottom, colorTextColor, new float[]{0.4f, 0.6f}, Shader.TileMode.MIRROR);
+        mPaint.setShader(shader);
+        canvas.drawText("非淡泊无以明智，非宁静无以致远", 0, getMeasuredHeight(), mPaint);
 
+    }
     public void drawGraph(Canvas canvas, RectF rectF, int count) {
         canvas.save();
         Shader shader = null;
@@ -238,7 +254,6 @@ public class LinearGradientView extends View {
             }
         }
         canvas.restore();
-    }
-
+    }r
 
 }

@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
     {
         modelList = new ArrayList<>();
         modelList.add(new PaintViewModel("线性渲染", R.layout.fragment_for_linear));
-        modelList.add(new PaintViewModel("线性渲染1",R.layout.fragment_for_linear));
+        modelList.add(new PaintViewModel("线性渲染1",R.layout.fragment_for_linear1));
     }
 
     @Override

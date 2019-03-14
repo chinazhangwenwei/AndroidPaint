@@ -254,6 +254,6 @@ public class LinearGradientView extends View {
             }
         }
         canvas.restore();
-    }r
+    }
 
 }

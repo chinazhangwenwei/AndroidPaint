@@ -24,8 +24,10 @@ public class MainActivity extends AppCompatActivity {
 
     {
         modelList = new ArrayList<>();
-        modelList.add(new PaintViewModel("线性渲染",R.layout.fragment_for_linear1));
-        modelList.add(new PaintViewModel("线性文字特效",R.layout.fragment_for_linear));
+        modelList.add(new PaintViewModel("线性渲染", R.layout.fragment_for_linear1));
+        modelList.add(new PaintViewModel("线性文字特效", R.layout.fragment_for_linear));
+        modelList.add(new PaintViewModel("扫描渲染", R.layout.fragment_for_sweep));
+        modelList.add(new PaintViewModel("雷达扫描", R.layout.fragment_for_radar));
     }
 
     @Override
@@ -42,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public Fragment getItem(int i) {
                 Bundle bundle = new Bundle();
-                bundle.putParcelable("model",modelList.get(i));
+                bundle.putParcelable("model", modelList.get(i));
                 return PaintContentFragment.createFragment(bundle);
             }
 

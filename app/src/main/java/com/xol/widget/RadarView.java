@@ -1,11 +1,10 @@
 package com.xol.widget;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Shader;
 import android.graphics.SweepGradient;
@@ -13,7 +12,6 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
-import android.view.animation.AccelerateInterpolator;
 import android.view.animation.LinearInterpolator;
 
 import com.xol.util.CommonUtil;
@@ -32,6 +30,7 @@ public class RadarView extends View {
     private int mPading;
     private Shader mSweepShader;
     private ValueAnimator mValueAnimator;
+    private Matrix mRoateMatrix;
     private float mDegressProgress = 0.2f;
 
     public RadarView(Context context) {
@@ -50,6 +49,7 @@ public class RadarView extends View {
 
     {
         mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mRoateMatrix = new Matrix();
         mCircleColor = Color.parseColor("#000000");
         mSweepColor = new int[]{Color.parseColor("#0000ff"),
                 Color.parseColor("#22000000")};
@@ -88,7 +88,9 @@ public class RadarView extends View {
         canvas.save();
         mPaint.setStyle(Paint.Style.FILL);
         mPaint.setShader(mSweepShader);
-        canvas.rotate(mDegressProgress * 360, mCenterX, mCenterY);
+        mRoateMatrix.setRotate(mDegressProgress * 360,mCenterX,mCenterY);
+        mSweepShader.setLocalMatrix(mRoateMatrix);
+        // canvas.rotate(mDegressProgress * 360, mCenterX, mCenterY);
         canvas.drawCircle(mCenterX, mCenterY, mRadius, mPaint);
         canvas.restore();
         //绘制圆形和直角坐标
@@ -107,13 +109,19 @@ public class RadarView extends View {
 
     }
 
+
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
+        Log.d(TAG, "onAttachedToWindow: ");
     }
 
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
+        Log.d(TAG, "onDetachedFromWindow: ");
+        if (mValueAnimator.isStarted()) {
+            mValueAnimator.cancel();
+        }
     }
 }

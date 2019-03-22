@@ -41,23 +41,26 @@ public class SweepGradientView extends View {
                 , Color.parseColor("#0000ff")};
 
     }
+
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         //绘制圆形
+        mPaint.setStyle(Paint.Style.FILL);
         mSweepGradient = new SweepGradient(200, 200, mColorArrayTwo[0], mColorArrayTwo[1]);
         mPaint.setShader(mSweepGradient);
-        canvas.drawCircle(  200, 200, 100, mPaint);
+        canvas.drawCircle(200, 200, 100, mPaint);
         //绘制圆形
-        mSweepGradient = new SweepGradient(300, 400, mColorArrayThree, null);
-        mPaint.setStyle(Paint.Style.STROKE);
+        mSweepGradient = new SweepGradient(500, 600, mColorArrayThree, new float[]{0.0f, 0.5f, 1.0f});
         mPaint.setStrokeWidth(CommonUtil.dp2px(4, getContext()));
         mPaint.setStrokeJoin(Paint.Join.ROUND);
         mPaint.setStrokeCap(Paint.Cap.ROUND);
         mPaint.setShader(mSweepGradient);
-        canvas.drawCircle(300, 400, 100, mPaint);
-        //绘制弧度
-        canvas.drawArc(200, 500, 300, 600, 0, 120, false, mPaint);
+        canvas.drawCircle(500, 600, 200, mPaint);
+        //绘制圆形
+        mSweepGradient = new SweepGradient(500, 1000, mColorArrayThree, new float[]{0.5f, 0.75f, 1.0f});
+        mPaint.setShader(mSweepGradient);
+        canvas.drawCircle(500, 1000, 200, mPaint);
 
     }
 }

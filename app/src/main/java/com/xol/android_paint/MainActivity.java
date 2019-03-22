@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
         modelList.add(new PaintViewModel("线性文字特效", R.layout.fragment_for_linear));
         modelList.add(new PaintViewModel("扫描渲染", R.layout.fragment_for_sweep));
         modelList.add(new PaintViewModel("雷达扫描", R.layout.fragment_for_radar));
+        modelList.add(new PaintViewModel("放射渲染", R.layout.fragment_for_radial));
     }
 
     @Override

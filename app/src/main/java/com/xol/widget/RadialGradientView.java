@@ -51,13 +51,18 @@ public class RadialGradientView extends View {
         mPaint.setShader(mShader);
         canvas.drawCircle(200, 200, 150, mPaint);
 
-        mShader = new RadialGradient(500, 200, 112.5f, mColorTwo[0], mColorTwo[1], Shader.TileMode.MIRROR);
+        mShader = new RadialGradient(500, 200, 40, mColorTwo[0], mColorTwo[1], Shader.TileMode.CLAMP);
         mPaint.setShader(mShader);
         canvas.drawCircle(500, 200, 150, mPaint);
 
-        mShader = new RadialGradient(200, 500, 40, mColorTwo[0], mColorTwo[1], Shader.TileMode.MIRROR);
+        mShader = new RadialGradient(800, 200, 40, mColorTwo[0], mColorTwo[1], Shader.TileMode.MIRROR);
         mPaint.setShader(mShader);
-        canvas.drawCircle(200, 500, 150, mPaint);
+        canvas.drawCircle(800, 200, 150, mPaint);
+
+        mShader = new RadialGradient(500, 500, 40,
+                mColorThree,new float[]{0.0f,0.5f,1.0f},Shader.TileMode.MIRROR);
+        mPaint.setShader(mShader);
+        canvas.drawCircle(500, 500, 150, mPaint);
 
 
     }

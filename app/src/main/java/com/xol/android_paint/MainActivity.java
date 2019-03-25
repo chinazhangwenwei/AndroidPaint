@@ -29,6 +29,9 @@ public class MainActivity extends AppCompatActivity {
         modelList.add(new PaintViewModel("扫描渲染", R.layout.fragment_for_sweep));
         modelList.add(new PaintViewModel("雷达扫描", R.layout.fragment_for_radar));
         modelList.add(new PaintViewModel("放射渲染", R.layout.fragment_for_radial));
+        modelList.add(new PaintViewModel("放射渲染应用", R.layout.fragment_for_radial_app));
+        modelList.add(new PaintViewModel("图片渲染",
+                R.layout.fragment_for_bitmap_shader));
     }
 
     @Override

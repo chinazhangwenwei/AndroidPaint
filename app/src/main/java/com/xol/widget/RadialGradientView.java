@@ -47,6 +47,7 @@ public class RadialGradientView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+        //第一排 两色
         mShader = new RadialGradient(200, 200, 40, mColorTwo[0], mColorTwo[1], Shader.TileMode.REPEAT);
         mPaint.setShader(mShader);
         canvas.drawCircle(200, 200, 150, mPaint);
@@ -59,11 +60,52 @@ public class RadialGradientView extends View {
         mPaint.setShader(mShader);
         canvas.drawCircle(800, 200, 150, mPaint);
 
+        //第二排 三色
+        mShader = new RadialGradient(200, 500, 40,
+                mColorThree,new float[]{0.0f,0.5f,1.0f},Shader.TileMode.REPEAT);
+        mPaint.setShader(mShader);
+        canvas.drawCircle(200, 500, 150, mPaint);
+
         mShader = new RadialGradient(500, 500, 40,
-                mColorThree,new float[]{0.0f,0.5f,1.0f},Shader.TileMode.MIRROR);
+                mColorThree,new float[]{0.0f,0.5f,1.0f},Shader.TileMode.CLAMP);
         mPaint.setShader(mShader);
         canvas.drawCircle(500, 500, 150, mPaint);
 
+        mShader = new RadialGradient(800, 500, 40,
+                mColorThree,new float[]{0.0f,0.5f,1.0f},Shader.TileMode.MIRROR);
+        mPaint.setShader(mShader);
+        canvas.drawCircle(800, 500, 150, mPaint);
+
+        //第三排 三色改变渲染色起点位置
+        mShader = new RadialGradient(200, 800, 40,
+                mColorThree,new float[]{0.5f,0.75f,1.0f},Shader.TileMode.REPEAT);
+        mPaint.setShader(mShader);
+        canvas.drawCircle(200, 800, 150, mPaint);
+
+        mShader = new RadialGradient(500, 800, 40,
+                mColorThree,new float[]{0.5f,0.75f,1.0f},Shader.TileMode.CLAMP);
+        mPaint.setShader(mShader);
+        canvas.drawCircle(500, 800, 150, mPaint);
+
+        mShader = new RadialGradient(800, 800, 40,
+                mColorThree,new float[]{0.5f,0.75f,1.0f},Shader.TileMode.MIRROR);
+        mPaint.setShader(mShader);
+        canvas.drawCircle(800, 800, 150, mPaint);
+        //第四排 三色改变，修改渲染坐标
+        mShader = new RadialGradient(50, 1100, 40,
+                mColorThree,new float[]{0.0f,0.5f,1.0f},Shader.TileMode.MIRROR);
+        mPaint.setShader(mShader);
+        canvas.drawCircle(200, 1100, 150, mPaint);
+
+        mShader = new RadialGradient(500, 950, 40,
+                mColorThree,new float[]{0.0f,0.5f,1.0f},Shader.TileMode.MIRROR);
+        mPaint.setShader(mShader);
+        canvas.drawCircle(500, 1100, 150, mPaint);
+
+        mShader = new RadialGradient(950, 1100, 40,
+                mColorThree,new float[]{0.0f,0.5f,1.0f},Shader.TileMode.MIRROR);
+        mPaint.setShader(mShader);
+        canvas.drawCircle(800, 1100, 150, mPaint);
 
     }
 

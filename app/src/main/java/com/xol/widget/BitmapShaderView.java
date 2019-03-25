@@ -8,9 +8,7 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Shader;
-import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -39,37 +37,51 @@ public class BitmapShaderView extends View {
 
     {
         mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        mRadius=100;
+        mRadius = 200;
     }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        if (mBitmap == null) {
-            Drawable drawable = ContextCompat.getDrawable(getContext(),
-                    R.drawable.rong);
-            mBitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(),
-                    drawable.getIntrinsicHeight(), Bitmap.Config.RGB_565);
-            Canvas canvas = new Canvas(mBitmap);
-            drawable.setBounds(0,0,canvas.getWidth(),canvas.getHeight());
-            drawable.draw(canvas);
-            mShader = new BitmapShader(mBitmap, Shader.TileMode.CLAMP,
-                    Shader.TileMode.CLAMP);
-            Matrix matrix = new Matrix();
-            float fScale = Math.max(mRadius*2/mBitmap.getWidth(),
-                    mRadius*2/mBitmap.getHeight());
-            matrix.setScale(fScale,fScale);
-            mShader.setLocalMatrix(matrix);
 
-        }
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-       // canvas.drawBitmap(mBitmap, 0, 0, mPaint);
+
+        if (mBitmap == null) {
+            mBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.rong);
+            mRadius = Math.min(getMeasuredWidth(), getMeasuredHeight());
+            mRadius = mRadius / 2;
+            mShader = new BitmapShader(mBitmap, Shader.TileMode.CLAMP,
+                    Shader.TileMode.CLAMP);
+            Matrix matrix = new Matrix();
+            float scale;
+            float trans;
+            //宽大于高
+            if (mBitmap.getWidth() > mBitmap.getHeight()) {
+                //缩放设置
+                scale = 2 * mRadius / mBitmap.getHeight();
+                matrix.setScale(scale, scale);
+                //水平方向平移到中间
+                trans = (2 * mRadius - mBitmap.getWidth() * scale) / 2;
+                matrix.postTranslate(trans, 0);
+
+            } else {
+                //缩放设置
+                scale = 2 * mRadius / mBitmap.getWidth();
+                matrix.setScale(scale, scale);
+                //移动到中间位置
+                // trans = (2 * mRadius - mBitmap.getHeight() * scale) / 2;
+                // matrix.postTranslate(0, trans);
+            }
+            mShader.setLocalMatrix(matrix);
+        }
         mPaint.setShader(mShader);
-        canvas.drawCircle(200, 200, mRadius, mPaint);
+        //绘制圆形
+        canvas.drawCircle(mRadius, mRadius, mRadius, mPaint);
+
 
     }
 }
